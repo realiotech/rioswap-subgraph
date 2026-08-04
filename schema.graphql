@@ -1,0 +1,78 @@
+type Account @entity(immutable: false) {
+	id: Bytes!
+	asERC20: ERC20Contract
+	ERC20balances: [ERC20Balance!]! @derivedFrom(field: "account")
+	ERC20transferFromEvent: [ERC20Transfer!]! @derivedFrom(field: "from")
+	ERC20transferToEvent: [ERC20Transfer!]! @derivedFrom(field: "to")
+	events: [Event!]! @derivedFrom(field: "emitter")
+}
+type ERC20Contract @entity(immutable: false) {
+	id: Bytes!
+	asAccount: Account!
+	name: String
+	symbol: String
+	decimals: Int!
+	totalSupply: ERC20Balance!
+	balances: [ERC20Balance!]! @derivedFrom(field: "contract")
+	transfers: [ERC20Transfer!]! @derivedFrom(field: "contract")
+  holders: Int!
+  transfersCount: Int!
+  mintCount: Int!
+  burnCount: Int!
+}
+type ERC20Balance @entity(immutable: false) {
+	id: ID!
+	contract: ERC20Contract!
+	account: Account
+	value: BigDecimal!
+	valueExact: BigInt!
+	transferFromEvent: [ERC20Transfer!]! @derivedFrom(field: "fromBalance")
+	transferToEvent: [ERC20Transfer!]! @derivedFrom(field: "toBalance")
+}
+type ERC20Transfer implements Event @entity(immutable: true) {
+	id: ID!
+	emitter: Account!
+	transaction: Transaction!
+	timestamp: BigInt!
+	contract: ERC20Contract!
+	from: Account
+	fromBalance: ERC20Balance
+	to: Account
+	toBalance: ERC20Balance
+	value: BigDecimal!
+	valueExact: BigInt!
+}
+type ERC20Mint implements Event @entity(immutable: true) {
+	id: ID!
+	emitter: Account!
+	transaction: Transaction!
+	timestamp: BigInt!
+	contract: ERC20Contract!
+  to: Account
+	toBalance: ERC20Balance
+	value: BigDecimal!
+	valueExact: BigInt!
+}
+type ERC20Burn implements Event @entity(immutable: true) {
+	id: ID!
+	emitter: Account!
+	transaction: Transaction!
+	timestamp: BigInt!
+	contract: ERC20Contract!
+	from: Account
+	fromBalance: ERC20Balance
+	value: BigDecimal!
+	valueExact: BigInt!
+}
+interface Event {
+	id: ID!
+	transaction: Transaction!
+	emitter: Account!
+	timestamp: BigInt!
+}
+type Transaction @entity(immutable: true) {
+	id: ID!
+	timestamp: BigInt!
+	blockNumber: BigInt!
+	events: [Event!]! @derivedFrom(field: "transaction")
+}

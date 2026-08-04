@@ -1,0 +1,6 @@
+node_modules/
+build/
+generated/
+.yarn/install-state.gz
+.claude/settings.local.json
+

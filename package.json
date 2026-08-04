@@ -1,0 +1,38 @@
+{
+  "name": "erc20-subgraph",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "auth": "graph auth https://api.thegraph.com/deploy/",
+    "codegen": "graph codegen v3-subgraph.testnet.yaml",
+    "build": "graph build v3-subgraph.testnet.yaml",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ graphprotocol/erc20-subgraph",
+    "create-testnet": "graph create --node http://localhost:8020/ v3-testnet-subgraph",
+    "create-mainnet": "graph create --node http://graph-node:8020/ dstrx-mainnet-subgraph",
+    "remove-local": "graph remove --node http://graph-node:8020/ graphprotocol/erc20-subgraph",
+    "deploy-testnet": "graph deploy --node http://localhost:8020/ --ipfs https://api.thegraph.com/ipfs/ --version-label v.0.0.1 v3-testnet-subgraph v3-subgraph.testnet.yaml",
+    "deploy-mainnet": "graph deploy --node http://graph-node:8020/ --ipfs http://ipfs:5001 --version-label v.0.0.1 dstrx-mainnet-subgraph v3-subgraph.testnet.yaml"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.97.0",
+    "@graphprotocol/graph-ts": "0.32.0"
+  },
+  "packageManager": "yarn@4.15.0+sha512.faf6b99be7e1e8a88a46b785b2842b0e17f2ba93f16b39764ddadd48407a0a2602d2f4bd7d6a7e58d308215d29d6f9cfeb7919709b020e57324f60a353e18f94",
+  "dependencies": {
+    "@amxx/graphprotocol-utils": "^1.2.0"
+  },
+  "overrides": {
+    "axios": "0.32.0",
+    "ejs": "3.1.10",
+    "follow-redirects": "1.16.0",
+    "glob": "11.1.0",
+    "immutable": "5.1.5",
+    "js-yaml": "4.1.1",
+    "lodash": "4.18.0",
+    "minimatch": "10.2.3",
+    "picomatch": "2.3.2",
+    "tmp": "0.2.6",
+    "undici": "7.24.0",
+    "uuid": "11.1.1"
+  }
+}
