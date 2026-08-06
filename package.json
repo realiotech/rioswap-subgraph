@@ -7,11 +7,11 @@
     "codegen": "graph codegen v3-subgraph.testnet.yaml",
     "build": "graph build v3-subgraph.testnet.yaml",
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ graphprotocol/erc20-subgraph",
-    "create-testnet": "graph create --node http://localhost:8020/ v3-testnet-subgraph",
-    "create-mainnet": "graph create --node http://graph-node:8020/ dstrx-mainnet-subgraph",
+    "create-testnet": "graph create --node http://graph-node:8020/ v3-testnet-subgraph",
+    "create-mainnet": "graph create --node http://graph-node:8020/ v3-mainnet-subgraph",
     "remove-local": "graph remove --node http://graph-node:8020/ graphprotocol/erc20-subgraph",
-    "deploy-testnet": "graph deploy --node http://localhost:8020/ --ipfs https://api.thegraph.com/ipfs/ --version-label v.0.0.1 v3-testnet-subgraph v3-subgraph.testnet.yaml",
-    "deploy-mainnet": "graph deploy --node http://graph-node:8020/ --ipfs http://ipfs:5001 --version-label v.0.0.1 dstrx-mainnet-subgraph v3-subgraph.testnet.yaml"
+    "deploy-testnet": "graph deploy --node http://graph-node:8020/ --ipfs http://ipfs:5001 --version-label v.0.0.1 v3-testnet-subgraph v3-subgraph.testnet.yaml",
+    "deploy-mainnet": "graph deploy --node http://graph-node:8020/ --ipfs http://ipfs:5001 --version-label v.0.0.1 v3-mainnet-subgraph v3-subgraph.testnet.yaml"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.97.0",
