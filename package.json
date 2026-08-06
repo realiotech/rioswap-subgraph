@@ -1,17 +1,21 @@
 {
-  "name": "erc20-subgraph",
+  "name": "rioswap-subgraph",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "auth": "graph auth https://api.thegraph.com/deploy/",
     "codegen": "graph codegen v3-subgraph.testnet.yaml",
+    "codegen:testnet": "graph codegen v3-subgraph.testnet.yaml",
+    "codegen:mainnet": "graph codegen v3-subgraph.mainnet.yaml",
     "build": "graph build v3-subgraph.testnet.yaml",
+    "build:testnet": "graph build v3-subgraph.testnet.yaml",
+    "build:mainnet": "graph build v3-subgraph.mainnet.yaml",
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ graphprotocol/erc20-subgraph",
-    "create-testnet": "graph create --node http://graph-node:8020/ v3-testnet-subgraph",
-    "create-mainnet": "graph create --node http://graph-node:8020/ v3-mainnet-subgraph",
-    "remove-local": "graph remove --node http://graph-node:8020/ graphprotocol/erc20-subgraph",
-    "deploy-testnet": "graph deploy --node http://graph-node:8020/ --ipfs http://ipfs:5001 --version-label v.0.0.1 v3-testnet-subgraph v3-subgraph.testnet.yaml",
-    "deploy-mainnet": "graph deploy --node http://graph-node:8020/ --ipfs http://ipfs:5001 --version-label v.0.0.1 v3-mainnet-subgraph v3-subgraph.testnet.yaml"
+    "create-testnet": "graph create --node http://graph-node:8020/ rioswap-testnet-subgraph",
+    "create-mainnet": "graph create --node http://graph-node:8020/ rioswap-mainnet-subgraph",
+    "remove-local": "graph remove --node http://graph-node:8020/ rioswap-testnet-subgraph",
+    "deploy-testnet": "graph deploy --node http://graph-node:8020/ --ipfs http://ipfs:5001 --version-label v.0.0.1 rioswap-testnet-subgraph v3-subgraph.testnet.yaml",
+    "deploy-mainnet": "graph deploy --node http://graph-node:8020/ --ipfs http://ipfs:5001 --version-label v.0.0.1 rioswap-mainnet-subgraph v3-subgraph.mainnet.yaml"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.97.0",

@@ -14,9 +14,9 @@ RUN --mount=type=cache,target=/root/.npm npm ci
 COPY . .
 COPY --chmod=755 docker/start /usr/local/bin/start
 
-# Build the Next.js app
-RUN npm run codegen
-RUN npm run build
+# Generate types and compile the mappings against the mainnet manifest
+RUN npm run codegen:mainnet
+RUN npm run build:mainnet
 
-# create-testnet and deploy-testnet reuire access to the graph node and ipfs
+# create-mainnet and deploy-mainnet require access to the graph node and ipfs
 ENTRYPOINT ["start", "mainnet"]

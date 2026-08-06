@@ -8,8 +8,7 @@ on:
       - '**'
       - '!.github/**'
       - '!docker/mainnet*'
-      - '!subgraph.mainnet.yaml'
-      - '!subgraph.yaml'
+      - '!v3-subgraph.mainnet.yaml'
   pull_request:
     branches:
       - stage
@@ -17,8 +16,7 @@ on:
       - '**'
       - '!.github/**'
       - '!docker/mainnet*'
-      - '!subgraph.mainnet.yaml'
-      - '!subgraph.yaml'
+      - '!v3-subgraph.mainnet.yaml'
   workflow_dispatch:
 
 jobs:
@@ -50,7 +48,7 @@ jobs:
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
         with:
           push: true
-          tags: ${{ vars.DO_IMAGE_REGISTRY_URL }}/kubernetes-stage/dstrx-subgraph:${{ github.sha }}-${{ github.run_number }}
+          tags: ${{ vars.DO_IMAGE_REGISTRY_URL }}/kubernetes-stage/rioswap-subgraph:${{ github.sha }}-${{ github.run_number }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           file: docker/testnet.Dockerfile
@@ -68,11 +66,11 @@ jobs:
         ref: main
     - name: Update Kubernetes manifest
       run: |
-        if cat explorer-graph-node/base/dstrx-subgraph-job.yaml | grep ${{ github.sha }}-${{ github.run_number }}; then
+        if cat explorer-graph-node/base/rioswap-subgraph-job.yaml | grep ${{ github.sha }}-${{ github.run_number }}; then
           echo "Image tag already exists in the manifest"
           exit 0
         fi
-        sed -i 's|image: .*$|image: '"registry.digitalocean.com/kubernetes-stage/dstrx-subgraph:${{ github.sha }}-${{ github.run_number }}"'|' explorer-graph-node/base/dstrx-subgraph-job.yaml
+        sed -i 's|image: .*$|image: '"registry.digitalocean.com/kubernetes-stage/rioswap-subgraph:${{ github.sha }}-${{ github.run_number }}"'|' explorer-graph-node/base/rioswap-subgraph-job.yaml
         git config user.name 'github-actions-bot'
         git config user.email 'devops@realio.fund'
         git add .
