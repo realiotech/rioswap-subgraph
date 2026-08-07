@@ -3,4 +3,4 @@
 docker
 .dockerignore
 README.md
-subgraph.testnet.yaml
+v3-subgraph.testnet.yaml

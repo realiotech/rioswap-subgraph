@@ -1,24 +1,32 @@
 name: mainnet
 
+# Prod is wired but intentionally NOT executed: this repo has no
+# v3-subgraph.mainnet.yaml yet, so a build would have nothing valid to deploy.
+# Only manual dispatch runs for now.
+#
+# To go live, the dev team should add v3-subgraph.mainnet.yaml (plus mainnet
+# addresses in src/common/chain.ts), remove `suspend: true` from
+# explorer-graph-node/overlays/prod/rioswap-subgraph-job.yaml in the gitops
+# repo, and uncomment the two triggers below.
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '**'
-      - '!.github/**'
-      - '!docker/testnet*'
-      - '!subgraph.testnet.yaml'
-      - '!subgraph.yaml'
-  pull_request:
-    branches:
-      - main
-    paths:
-      - '**'
-      - '!.github/**'
-      - '!docker/testnet*'
-      - '!subgraph.testnet.yaml'
-      - '!subgraph.yaml'
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - '**'
+  #     - '!.github/**'
+  #     - '!docker/testnet*'
+  #     - '!v3-subgraph.testnet.yaml'
+  #     - '!v3-tokens-subgraph.testnet.template.yaml'
+  # pull_request:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - '**'
+  #     - '!.github/**'
+  #     - '!docker/testnet*'
+  #     - '!v3-subgraph.testnet.yaml'
+  #     - '!v3-tokens-subgraph.testnet.template.yaml'
   workflow_dispatch:
 
 jobs:
@@ -50,7 +58,7 @@ jobs:
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         with:
           push: true
-          tags: ${{ vars.DO_IMAGE_REGISTRY_URL }}/kubernetes-prod/dstrx-subgraph:${{ github.sha }}-${{ github.run_number }}
+          tags: ${{ vars.DO_IMAGE_REGISTRY_URL }}/kubernetes-prod/rioswap-subgraph:${{ github.sha }}-${{ github.run_number }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           file: docker/mainnet.Dockerfile
@@ -68,11 +76,11 @@ jobs:
         ref: main
     - name: Update Kubernetes manifest
       run: |
-        if cat explorer-graph-node/overlays/prod/dstrx-subgraph-job.yaml | grep ${{ github.sha }}-${{ github.run_number }}; then
+        if cat explorer-graph-node/overlays/prod/rioswap-subgraph-job.yaml | grep ${{ github.sha }}-${{ github.run_number }}; then
           echo "Image tag already exists in the manifest"
           exit 0
         fi
-        sed -i 's|image: .*$|image: '"registry.digitalocean.com/kubernetes-prod/dstrx-subgraph:${{ github.sha }}-${{ github.run_number }}"'|' explorer-graph-node/overlays/prod/dstrx-subgraph-job.yaml
+        sed -i 's|image: .*$|image: '"registry.digitalocean.com/kubernetes-prod/rioswap-subgraph:${{ github.sha }}-${{ github.run_number }}"'|' explorer-graph-node/overlays/prod/rioswap-subgraph-job.yaml
         git config user.name 'github-actions-bot'
         git config user.email 'devops@realio.fund'
         git add .

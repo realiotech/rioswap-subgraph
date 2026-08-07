@@ -3,4 +3,4 @@
 docker
 .dockerignore
 README.md
-subgraph.mainnet.yaml
+v3-subgraph.mainnet.yaml
