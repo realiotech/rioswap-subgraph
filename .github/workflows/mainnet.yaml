@@ -1,24 +1,32 @@
 name: mainnet
 
+# Prod is wired but intentionally NOT executed: this repo has no
+# v3-subgraph.mainnet.yaml yet, so a build would have nothing valid to deploy.
+# Only manual dispatch runs for now.
+#
+# To go live, the dev team should add v3-subgraph.mainnet.yaml (plus mainnet
+# addresses in src/common/chain.ts), remove `suspend: true` from
+# explorer-graph-node/overlays/prod/rioswap-subgraph-job.yaml in the gitops
+# repo, and uncomment the two triggers below.
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '**'
-      - '!.github/**'
-      - '!docker/testnet*'
-      - '!v3-subgraph.testnet.yaml'
-      - '!v3-tokens-subgraph.testnet.template.yaml'
-  pull_request:
-    branches:
-      - main
-    paths:
-      - '**'
-      - '!.github/**'
-      - '!docker/testnet*'
-      - '!v3-subgraph.testnet.yaml'
-      - '!v3-tokens-subgraph.testnet.template.yaml'
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - '**'
+  #     - '!.github/**'
+  #     - '!docker/testnet*'
+  #     - '!v3-subgraph.testnet.yaml'
+  #     - '!v3-tokens-subgraph.testnet.template.yaml'
+  # pull_request:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - '**'
+  #     - '!.github/**'
+  #     - '!docker/testnet*'
+  #     - '!v3-subgraph.testnet.yaml'
+  #     - '!v3-tokens-subgraph.testnet.template.yaml'
   workflow_dispatch:
 
 jobs:
