@@ -1,6 +1,6 @@
 specVersion: 0.0.5
 schema:
-  file: ./src/v3/schema.graphql
+  file: ./src/schema.graphql
 features:
   - nonFatalErrors
   - grafting
@@ -34,6 +34,37 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address,indexed address,indexed uint24,int24,address)
           handler: handlePoolCreated
+  # Uniswap v2 (src/v2): pairs from the v2 factory deployed by rioswap-v3's
+  # packages/contracts/scripts/deploy-v2.ts, starting at its deploy block.
+  - kind: ethereum/contract
+    name: V2Factory
+    network: mainnet
+    source:
+      abi: Factory
+      address: "0xF1A8079aAbE5b80c7A558535d284aF0193Fc2c7E"
+      startBlock: 7642102
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/v2/mappings/factory.ts
+      entities:
+        - Pair
+        - V2Token
+      abis:
+        - name: Factory
+          file: ./abis/v2/factory.json
+        - name: ERC20
+          file: ./abis/v2/ERC20.json
+        - name: ERC20SymbolBytes
+          file: ./abis/v2/ERC20SymbolBytes.json
+        - name: ERC20NameBytes
+          file: ./abis/v2/ERC20NameBytes.json
+        - name: ERC20BigDecimals
+          file: ./abis/v2/ERC20BigDecimals.json
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handleNewPair
 templates:
   - kind: ethereum/contract
     name: Pool
@@ -68,3 +99,32 @@ templates:
         - event: Collect(indexed address,address,indexed int24,indexed
             int24,uint128,uint128)
           handler: handleCollect
+  - kind: ethereum/contract
+    name: Pair
+    network: mainnet
+    source:
+      abi: Pair
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/v2/mappings/core.ts
+      entities:
+        - Pair
+        - V2Token
+      abis:
+        - name: Pair
+          file: ./abis/v2/pair.json
+        - name: Factory
+          file: ./abis/v2/factory.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleMint
+        - event: Burn(indexed address,uint256,uint256,indexed address)
+          handler: handleBurn
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+          handler: handleSwap
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Sync(uint112,uint112)
+          handler: handleSync
