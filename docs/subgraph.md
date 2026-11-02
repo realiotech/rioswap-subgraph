@@ -4,7 +4,7 @@ Explore key entities and practical GraphQL query patterns for the RioSwap v3 sub
 
 The RioSwap v3 subgraph indexes onchain events from the Factory and Pool contracts on Realio Network and exposes them as a GraphQL API via [The Graph](https://thegraph.com/). You can use it to query protocol metrics, pool state, swaps, token data, and liquidity position activity.
 
-The full schema is available at [`src/v3/schema.graphql`](../src/v3/schema.graphql) in this repository.
+The same subgraph also indexes Uniswap v2 pairs and Uniswap v4 pools on Realio testnet (see [Uniswap v2 and v4](#uniswap-v2-and-v4)). The full schema is available at [`src/schema.graphql`](../src/schema.graphql) in this repository.
 
 ## Endpoint
 The testnet subgraph is deployed at:
@@ -36,6 +36,29 @@ curl -X POST \
 | **PoolDayData / PoolHourData**   | Time-series snapshots for pool metrics                                     |
 | **TokenDayData / TokenHourData** | Time-series snapshots for token metrics                                    |
 | **UniswapDayData**               | Protocol-wide daily snapshot (volume, fees, TVL, tx count)                 |
+
+## Uniswap v2 and v4
+
+v2 pairs come from the v2 factory (`0xF1A8079aAbE5b80c7A558535d284aF0193Fc2c7E`), v4 pools from the PoolManager (`0xd4A554F23421faF2c79C2432B2092bB1e3016258`). Their mappings are Uniswap's own ([v2-subgraph](https://github.com/Uniswap/v2-subgraph), [v4-subgraph](https://github.com/Uniswap/v4-subgraph); commits in `src/v2/UPSTREAM`, `src/v4/UPSTREAM`), with entities renamed where they would clash with v3's:
+
+| Version | Collections |
+| ------- | ----------- |
+| v2      | `pairs`, `v2Tokens`, `v2Swaps`, `v2Mints`, `v2Burns`, `pairDayDatas`, `pairHourDatas`, `v2Bundles` |
+| v4      | `v4Pools`, `v4Tokens`, `v4Swaps`, `modifyLiquidities`, `v4Ticks`, `v4PoolDayDatas`, `v4PoolHourDatas`, `v4Bundles`, `v4Positions` |
+
+A v4 pool's `id` is its pool id (bytes32); the native coin is the token at the zero address. `v4Positions` lists PositionManager NFTs (`0x38c286d406802557351AB14E352D88d7d22a7746`) by owner, since the contract can't enumerate them:
+
+```graphql
+{
+  v4Positions(where: { owner: "0x1522f956ebb1a0a6d60e3eb747cf503362e0b5a8" }) {
+    tokenId
+    pool { id token0 { symbol } token1 { symbol } }
+    tickLower
+    tickUpper
+    liquidity
+  }
+}
+```
 
 ## Common Query Patterns
 ## Protocol-wide metrics
